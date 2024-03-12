@@ -24,6 +24,11 @@ const products = productsFromServer.map((product) => {
   };
 });
 
+// const SORT_BY_ID = 'ID';
+// const SORT_BY_PRODUCT = 'Product';
+// const SORT_BY_CATEGORY = 'Category';
+// const SORT_BY_USER = 'User';
+
 function getProductsList(startproducts, { query, selectedUser }) {
   let productsList = [...startproducts];
 
@@ -41,14 +46,34 @@ function getProductsList(startproducts, { query, selectedUser }) {
     );
   }
 
+  // if (sortBy) {
+  //   productsList.sort((product1, product2) => {
+  //     switch (sortBy) {
+  //       case SORT_BY_ID: return product1.id - product2.id;
+  //       case SORT_BY_PRODUCT:
+  //         return product1.name.localeCompare(product2.name);
+  //       case SORT_BY_CATEGORY:
+  //         return product1.category.name.localeCompare(product2.category.name);
+  //       case SORT_BY_USER:
+  //         return product1.owner.name.localeCompare(product2.owner.name);
+  //       default:
+  //         return 0;
+  //     }
+  //   });
+  // }
+
   return productsList;
 }
 
 export const App = () => {
   const [query, setQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState('All');
-  const visibleProducts = getProductsList(products, { query, selectedUser });
-  const listIsEmpty = visibleProducts.length === 0;
+  // const [sortBy, setSortBy] = useState('');
+  const visibleProducts = getProductsList(
+    products,
+    { query, selectedUser },
+  );
+  const isListEmpty = visibleProducts.length === 0;
 
   const reset = () => {
     setQuery('');
@@ -68,7 +93,9 @@ export const App = () => {
               <a
                 data-cy="FilterAllUsers"
                 href="#/"
-                className={classNames({ 'is-active': selectedUser === 'All' })}
+                className={classNames(
+                  { 'is-active': selectedUser === 'All' },
+                )}
                 onClick={() => setSelectedUser('All')}
               >
                 All
@@ -172,13 +199,13 @@ export const App = () => {
         </div>
 
         <div className="box table-container">
-          {listIsEmpty && (
+          {isListEmpty && (
             <p data-cy="NoMatchingMessage">
               No products matching selected criteria
             </p>
           )}
 
-          {!listIsEmpty && (
+          {!isListEmpty && (
             <table
               data-cy="ProductTable"
               className="table is-striped is-narrow is-fullwidth"
