@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/accessible-emoji */
 import React, { useState } from 'react';
 import classNames from 'classnames';
 import './App.scss';
@@ -36,6 +35,12 @@ function getProductsList(startproducts, { query, selectedUser }) {
     );
   }
 
+  if (selectedUser && selectedUser !== 'All') {
+    productsList = productsList.filter(
+      product => product.owner.id === selectedUser,
+    );
+  }
+
   return productsList;
 }
 
@@ -63,7 +68,8 @@ export const App = () => {
               <a
                 data-cy="FilterAllUsers"
                 href="#/"
-                // onClick={event => setSelectedUser(event.target.value)}
+                className={classNames({ 'is-active': selectedUser === 'All' })}
+                onClick={() => setSelectedUser('All')}
               >
                 All
               </a>
@@ -73,8 +79,10 @@ export const App = () => {
                   data-cy="FilterUser"
                   href="#/"
                   key={user.id}
-                  // value={user.name}
-                  // onClick={event => setSelectedUser(event.target.value)}
+                  className={classNames(
+                    { 'is-active': selectedUser === user.id },
+                  )}
+                  onClick={() => setSelectedUser(user.id)}
                 >
                   {user.name}
                 </a>
